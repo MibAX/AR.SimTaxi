@@ -14,12 +14,13 @@ namespace AR.SimTaxi.Controllers
         public CarsController(ApplicationDbContext context)
         {
             _context = context;
-        } 
+        }
 
         #endregion
 
         #region Actions
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var cars = await _context
@@ -29,6 +30,7 @@ namespace AR.SimTaxi.Controllers
             return View(cars);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int? id) 
         {
             if (id == null)
@@ -48,6 +50,7 @@ namespace AR.SimTaxi.Controllers
             return View(car);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -55,7 +58,7 @@ namespace AR.SimTaxi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Model,Color,PlateNumber,ProductionYear,CarType,PowerType")] Car car)
+        public async Task<IActionResult> Create(Car car)
         {
             if (ModelState.IsValid)
             {
@@ -63,9 +66,11 @@ namespace AR.SimTaxi.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(car);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,7 +88,7 @@ namespace AR.SimTaxi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Color,PlateNumber,ProductionYear,CarType,PowerType")] Car car)
+        public async Task<IActionResult> Edit(int id, Car car)
         {
             if (id != car.Id)
             {
@@ -113,6 +118,7 @@ namespace AR.SimTaxi.Controllers
             return View(car);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
