@@ -10,6 +10,6 @@ namespace AR.SimTaxi.Data.Entities
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
 
-        public List<Car> Cars { get; set; }
+        public List<Car> Cars { get; set; } = [];
     }
 }
