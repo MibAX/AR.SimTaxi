@@ -11,5 +11,8 @@ namespace AR.SimTaxi.Data.Entities
         public DateTime ProductionYear { get; set; }
         public CarType CarType { get; set; }
         public PowerType PowerType { get; set; }
+
+        public int? DriverId { get; set; }
+        public Driver? Driver { get; set; } // ? means Optional إختياري
     }
 }

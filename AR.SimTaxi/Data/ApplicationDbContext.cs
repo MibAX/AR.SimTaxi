@@ -7,6 +7,7 @@ namespace AR.SimTaxi.Data
     public class ApplicationDbContext : IdentityDbContext
     {
         public DbSet<Car> Cars { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
