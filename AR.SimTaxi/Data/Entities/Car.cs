@@ -12,7 +12,7 @@ namespace AR.SimTaxi.Data.Entities
         public CarType CarType { get; set; }
         public PowerType PowerType { get; set; }
 
-        public int? DriverId { get; set; }
+        public int? DriverId { get; set; } // ? means Optional إختياري
         public Driver? Driver { get; set; } // ? means Optional إختياري
     }
 }
