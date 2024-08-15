@@ -1,15 +1,19 @@
 ﻿@model IEnumerable<AR.SimTaxi.Data.Entities.Driver>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Drivers";
 }
 
-<h1>Index</h1>
+<h1>Drivers</h1>
+<hr />
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create a New Driver</a>
 </p>
-<table class="table">
+
+<hr />
+
+<table class="table table-hover table-striped">
     <thead>
         <tr>
             <th>

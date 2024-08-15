@@ -1,13 +1,15 @@
 ﻿@model AR.SimTaxi.Data.Entities.Driver
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Driver Details";
 }
 
-<h1>Details</h1>
+<h1>
+    Driver Details
+    <span class="text-primary">@Model.FirstName @Model.LastName</span>    
+</h1>
 
 <div>
-    <h4>Driver</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -37,6 +39,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary ms-2">Edit</a>
 </div>

@@ -4,7 +4,7 @@ namespace AR.SimTaxi.Data.Entities
 {
     public class Car
     {
-        public int Id { get; set; }
+        public int Id { get; set; } // Required 
         public string Model { get; set; }
         public string Color { get; set; }
         public string PlateNumber { get; set; }
@@ -12,7 +12,7 @@ namespace AR.SimTaxi.Data.Entities
         public CarType CarType { get; set; }
         public PowerType PowerType { get; set; }
 
-        public int? DriverId { get; set; } // ? means Optional إختياري
-        public Driver? Driver { get; set; } // ? means Optional إختياري
+        public int? DriverId { get; set; } // ? Nullable
+        public Driver? Driver { get; set; } // ? Nullable
     }
 }
