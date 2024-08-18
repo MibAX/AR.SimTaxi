@@ -20,14 +20,18 @@ namespace AR.SimTaxi.Controllers
 
         #region Actions
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var drivers = await _context.Drivers.ToListAsync();
+            var drivers = await _context
+                                    .Drivers
+                                    .ToListAsync();
 
             return View(drivers);
         }
 
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Details(int? id) // 1003
         {
             if (id == null)
             {
@@ -46,6 +50,7 @@ namespace AR.SimTaxi.Controllers
             return View(driver);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -53,7 +58,7 @@ namespace AR.SimTaxi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,DateOfBirth,Gender")] Driver driver)
+        public async Task<IActionResult> Create(Driver driver)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +69,7 @@ namespace AR.SimTaxi.Controllers
             return View(driver);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,16 +78,18 @@ namespace AR.SimTaxi.Controllers
             }
 
             var driver = await _context.Drivers.FindAsync(id);
+
             if (driver == null)
             {
                 return NotFound();
             }
+
             return View(driver);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,DateOfBirth,Gender")] Driver driver)
+        public async Task<IActionResult> Edit(int id, Driver driver)
         {
             if (id != driver.Id)
             {
@@ -108,9 +116,11 @@ namespace AR.SimTaxi.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(driver);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
