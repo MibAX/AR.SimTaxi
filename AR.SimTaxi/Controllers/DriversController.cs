@@ -31,7 +31,7 @@ namespace AR.SimTaxi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int? id) // 1003
+        public async Task<IActionResult> Details(int? id) // 4
         {
             if (id == null)
             {
@@ -40,7 +40,9 @@ namespace AR.SimTaxi.Controllers
 
             var driver = await _context
                                     .Drivers
-                                    .FirstOrDefaultAsync(m => m.Id == id);
+                                    .Include(driver => driver.Cars)
+                                    .Where(driver => driver.Id == id)
+                                    .SingleOrDefaultAsync();
 
             if (driver == null)
             {

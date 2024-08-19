@@ -13,6 +13,28 @@
 
 
 <dl class="row">
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Driver)
+    </dt>
+    <dd class="col-sm-10">
+
+        @if(Model.Driver == null)
+        {
+            <span class="fst-italic text-muted">n/a</span>
+        }
+        else
+        {
+            <span>
+                @Html.DisplayFor(model => model.Driver.FirstName)
+            </span>
+            <span>
+                @Html.DisplayFor(model => model.Driver.LastName)
+            </span>
+        }
+
+    </dd>
+
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.Model)
     </dt>

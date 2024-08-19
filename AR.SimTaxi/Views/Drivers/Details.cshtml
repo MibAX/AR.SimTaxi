@@ -37,8 +37,81 @@
             @Html.DisplayFor(model => model.Gender)
         </dd>
     </dl>
+
+    <hr />
+
+    <h4>Driver Cars</h4>
+
+    <hr />
+
+    @if(Model.Cars.Count > 0)
+    {
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Model
+                    </th>
+                    <th>
+                        Color
+                    </th>
+                    <th>
+                        Plate Number
+                    </th>
+                    <th>
+                        Production Year
+                    </th>
+                    <th>
+                        Car Type
+                    </th>
+                    <th>
+                        Power Type
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var car in Model.Cars)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.Color)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.PlateNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.ProductionYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.CarType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.PowerType)
+                        </td>
+                        <td>
+                            <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h4 class="text-center fw-bold">
+            No cars are assigned to the Driver!
+        </h4>           
+    }
+
 </div>
-<div>
+
+<div class="mt-5">
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary ms-2">Edit</a>
 </div>

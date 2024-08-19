@@ -25,6 +25,7 @@ namespace AR.SimTaxi.Controllers
         {
             var cars = await _context
                                 .Cars
+                                .Include(car => car.Driver)
                                 .ToListAsync();
 
             return View(cars);
@@ -40,7 +41,9 @@ namespace AR.SimTaxi.Controllers
 
             var car = await _context
                                 .Cars
-                                .FirstOrDefaultAsync(m => m.Id == id); // lambda expression
+                                .Include(car => car.Driver)
+                                .Where(car => car.Id == id)
+                                .SingleOrDefaultAsync(); 
 
             if (car == null) // No car in the DB with id if found
             {
