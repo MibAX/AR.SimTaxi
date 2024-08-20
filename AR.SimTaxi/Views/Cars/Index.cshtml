@@ -38,7 +38,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.PowerType)
             </th>
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -70,7 +72,7 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => car.ProductionYear)
+                    @car.ProductionYear.ToString("yyyy")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => car.CarType)
@@ -79,9 +81,18 @@
                     @Html.DisplayFor(modelItem => car.PowerType)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@car.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@car.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@car.Id">Delete</a>
+                    <a class="text-decoration-none" asp-action="Edit" asp-route-id="@car.Id" title="Edit">
+                        <i class="fa-solid fa-pen-fancy"></i>
+                    </a>
+
+                    <a class="text-decoration-none ms-1" asp-action="Details" asp-route-id="@car.Id" title="Details">
+                        <i class="fa-solid fa-circle-info text-info"></i>
+                    </a>
+
+                    <a class="text-decoration-none ms-1" asp-action="Delete" asp-route-id="@car.Id" title="Delete">
+                        <i class="fa-solid fa-trash text-danger"></i>
+                    </a>
+
                 </td>
             </tr>
         }

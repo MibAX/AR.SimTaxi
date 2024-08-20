@@ -32,26 +32,63 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var driver in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => driver.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => driver.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => driver.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => driver.Gender)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@driver.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@driver.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@driver.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var driver in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => driver.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => driver.LastName)
+                </td>
+                <td>
+                    @driver.DateOfBirth.ToString("ddd, dd/MMM/yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => driver.Gender)
+                </td>
+                <td>
+                    <a class="text-decoration-none" asp-action="Edit" asp-route-id="@driver.Id" title="Edit">
+                        <i class="fa-solid fa-pen-fancy"></i>
+                    </a>
+
+                    <a class="text-decoration-none ms-1" asp-action="Details" asp-route-id="@driver.Id" title="Details">
+                        <i class="fa-solid fa-circle-info text-info"></i>
+                    </a>
+
+                    <a href="#" class="text-decoration-none ms-1" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal_@driver.Id">
+                        <i class="fa-solid fa-trash text-danger"></i>
+                    </a>
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal_@driver.Id" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Driver</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h4>
+                                        Are you sure you want to delete driver
+                                        <span class="text-danger">@driver.FirstName @driver.LastName</span>?
+                                    </h4>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <form asp-action="Delete">
+                                        <input type="hidden" name="id" value="@driver.Id" />
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

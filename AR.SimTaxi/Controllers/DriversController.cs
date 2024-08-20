@@ -122,35 +122,22 @@ namespace AR.SimTaxi.Controllers
             return View(driver);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var driver = await _context.Drivers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (driver == null)
-            {
-                return NotFound();
-            }
-
-            return View(driver);
-        }
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var driver = await _context.Drivers.FindAsync(id);
-            if (driver != null)
+
+            if (driver == null)
+            {
+                return NotFound();
+            }
+            else
             {
                 _context.Drivers.Remove(driver);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
