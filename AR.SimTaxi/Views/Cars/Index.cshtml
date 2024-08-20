@@ -89,9 +89,37 @@
                         <i class="fa-solid fa-circle-info text-info"></i>
                     </a>
 
-                    <a class="text-decoration-none ms-1" asp-action="Delete" asp-route-id="@car.Id" title="Delete">
+                    <a href="#" class="text-decoration-none ms-1" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal_@car.Id">
                         <i class="fa-solid fa-trash text-danger"></i>
                     </a>
+
+                    <!-- Delete Modal -->
+                    <div class="modal fade" id="deleteModal_@car.Id" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Driver</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h4>
+                                        Are you sure you want to delete car
+                                        <span class="text-danger">@car.Model - @car.PlateNumber</span>?
+                                    </h4>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <form asp-action="Delete">
+                                        <input type="hidden" name="id" value="@car.Id" />
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </td>
             </tr>

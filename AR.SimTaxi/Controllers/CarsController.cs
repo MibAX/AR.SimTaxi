@@ -32,7 +32,7 @@ namespace AR.SimTaxi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int? id) 
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -43,7 +43,7 @@ namespace AR.SimTaxi.Controllers
                                 .Cars
                                 .Include(car => car.Driver)
                                 .Where(car => car.Id == id)
-                                .SingleOrDefaultAsync(); 
+                                .SingleOrDefaultAsync();
 
             if (car == null) // No car in the DB with id if found
             {
@@ -121,35 +121,24 @@ namespace AR.SimTaxi.Controllers
             return View(car);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var car = await _context.Cars
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-
-            return View(car);
-        }
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var car = await _context.Cars.FindAsync(id);
-            if (car != null)
+            var car = await _context
+                                .Cars
+                                .FindAsync(id);
+
+            if (car == null)
+            {
+                return NotFound();
+            }
+            else 
             {
                 _context.Cars.Remove(car);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -160,7 +149,7 @@ namespace AR.SimTaxi.Controllers
         private bool CarExists(int id)
         {
             return _context.Cars.Any(e => e.Id == id);
-        } 
+        }
         #endregion
     }
 }
