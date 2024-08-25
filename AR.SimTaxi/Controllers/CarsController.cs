@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using AR.SimTaxi.Data;
 using AR.SimTaxi.Data.Entities;
+using AR.SimTaxi.Models.Cars;
+using AutoMapper;
 
 namespace AR.SimTaxi.Controllers
 {
@@ -10,10 +12,12 @@ namespace AR.SimTaxi.Controllers
         #region Data and Const
 
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CarsController(ApplicationDbContext context)
+        public CarsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            this._mapper = mapper;
         }
 
         #endregion
@@ -28,7 +32,10 @@ namespace AR.SimTaxi.Controllers
                                 .Include(car => car.Driver)
                                 .ToListAsync();
 
-            return View(cars);
+
+            var carVMs = _mapper.Map<List<Car>, List<CarViewModel>>(cars);
+
+            return View(carVMs);
         }
 
         [HttpGet]

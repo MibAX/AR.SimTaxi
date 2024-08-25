@@ -1,4 +1,5 @@
-﻿@model IEnumerable<AR.SimTaxi.Data.Entities.Car>
+﻿@using AR.SimTaxi.Models.Cars
+@model IEnumerable<CarViewModel>
 
 @{
     ViewData["Title"] = "Cars";
@@ -27,10 +28,10 @@
                 @Html.DisplayNameFor(model => model.PlateNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Driver)
+                @Html.DisplayNameFor(model => model.DriverFullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductionYear)
+                @Html.DisplayNameFor(model => model.Year)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CarType)
@@ -57,22 +58,19 @@
                     @Html.DisplayFor(modelItem => car.PlateNumber)
                 </td>
                 <td>
-                    @if (car.Driver == null)
+                    @if (car.DriverFullName.Length < 0)
                     {
                         <span class="fst-italic text-muted">n/a</span>
                     }
                     else
                     {
                         <span>
-                            @Html.DisplayFor(modelItem => car.Driver.FirstName)
-                        </span>
-                        <span>
-                            @Html.DisplayFor(modelItem => car.Driver.LastName)
+                            @Html.DisplayFor(modelItem => car.DriverFullName)
                         </span>
                     }
                 </td>
                 <td>
-                    @car.ProductionYear.ToString("yyyy")
+                    @Html.DisplayFor(modelItem => car.Year)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => car.CarType)
