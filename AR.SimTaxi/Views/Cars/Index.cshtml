@@ -58,7 +58,7 @@
                     @Html.DisplayFor(modelItem => car.PlateNumber)
                 </td>
                 <td>
-                    @if (car.DriverFullName.Length < 0)
+                    @if (string.IsNullOrWhiteSpace(car.DriverFullName))
                     {
                         <span class="fst-italic text-muted">n/a</span>
                     }

@@ -57,7 +57,9 @@ namespace AR.SimTaxi.Controllers
                 return NotFound();
             }
 
-            return View(car);
+            var carDetailsVM = _mapper.Map<Car, CarDetailsViewModel>(car);
+
+            return View(carDetailsVM);
         }
 
         [HttpGet]

@@ -9,6 +9,7 @@ namespace AR.SimTaxi.AutoMapperProfiles
         public CarAutoMapperProfile()
         {
             CreateMap<Car, CarViewModel>();
+            CreateMap<Car, CarDetailsViewModel>();
         }
     }
 }
