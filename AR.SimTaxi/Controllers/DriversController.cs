@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using AR.SimTaxi.Data;
 using AR.SimTaxi.Data.Entities;
+using AutoMapper;
+using AR.SimTaxi.Models.Drivers;
 
 namespace AR.SimTaxi.Controllers
 {
@@ -10,10 +12,12 @@ namespace AR.SimTaxi.Controllers
         #region Data and Const
 
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public DriversController(ApplicationDbContext context)
+        public DriversController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         #endregion
@@ -25,13 +29,16 @@ namespace AR.SimTaxi.Controllers
         {
             var drivers = await _context
                                     .Drivers
+                                    .OrderBy(driver => driver.FirstName)
                                     .ToListAsync();
 
-            return View(drivers);
+            var driverVMs = _mapper.Map<List<Driver>, List<DriverViewModel>>(drivers);
+
+            return View(driverVMs);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int? id) // 4
+        public async Task<IActionResult> Details(int? id) 
         {
             if (id == null)
             {
@@ -49,7 +56,9 @@ namespace AR.SimTaxi.Controllers
                 return NotFound();
             }
 
-            return View(driver);
+            var driverDetailsVM = _mapper.Map<Driver, DriverDetailsViewModel>(driver);
+
+            return View(driverDetailsVM);
         }
 
         [HttpGet]

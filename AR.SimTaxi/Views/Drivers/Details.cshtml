@@ -1,4 +1,5 @@
-﻿@model AR.SimTaxi.Data.Entities.Driver
+﻿@using AR.SimTaxi.Models.Drivers
+@model DriverDetailsViewModel
 
 @{
     ViewData["Title"] = "Driver Details";
@@ -6,30 +7,26 @@
 
 <h1>
     Driver Details
-    <span class="text-primary">@Model.FirstName @Model.LastName</span>    
+    <span class="text-primary">@Model.FullName</span>    
 </h1>
 
 <div>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.FullName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
+            @Html.DisplayFor(model => model.FullName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateOfBirth)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
+            @Model.DateOfBirth.ToLongDateString()
         </dd>
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Gender)
         </dt>
@@ -40,9 +37,7 @@
 
     <hr />
 
-    <h4>Driver Cars</h4>
-
-    <hr />
+    <h4 class="mb-4">Cars</h4>
 
     @if(Model.Cars.Count > 0)
     {
@@ -59,7 +54,7 @@
                         Plate Number
                     </th>
                     <th>
-                        Production Year
+                        Year
                     </th>
                     <th>
                         Car Type
@@ -86,7 +81,7 @@
                             @Html.DisplayFor(modelItem => car.PlateNumber)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => car.ProductionDate)
+                            @Html.DisplayFor(modelItem => car.Year)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => car.CarType)
@@ -95,7 +90,9 @@
                             @Html.DisplayFor(modelItem => car.PowerType)
                         </td>
                         <td>
-                            <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id">Details</a>
+                            <a asp-controller="Cars" asp-action="Details" asp-route-id="@car.Id" title="Details">
+                                <i class="fa-solid fa-circle-info text-info"></i>
+                            </a>
                         </td>
                     </tr>
                 }
