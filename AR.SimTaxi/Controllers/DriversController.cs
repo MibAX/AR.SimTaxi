@@ -69,15 +69,19 @@ namespace AR.SimTaxi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Driver driver)
+        public async Task<IActionResult> Create(CreateUpdateDriverViewModel createUpdateDriverVM)
         {
             if (ModelState.IsValid)
             {
+                var driver = _mapper.Map<CreateUpdateDriverViewModel, Driver>(createUpdateDriverVM);
+
                 _context.Add(driver);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(driver);
+
+            return View(createUpdateDriverVM);
         }
 
         [HttpGet]
