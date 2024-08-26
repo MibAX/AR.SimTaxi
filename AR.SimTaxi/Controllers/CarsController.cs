@@ -70,16 +70,19 @@ namespace AR.SimTaxi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Car car)
+        public async Task<IActionResult> Create(CreateUpdateCarViewModel createUpdateCarVM)
         {
             if (ModelState.IsValid)
             {
+                var car = _mapper.Map<CreateUpdateCarViewModel, Car>(createUpdateCarVM);
+
                 _context.Add(car);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(car);
+            return View(createUpdateCarVM);
         }
 
         [HttpGet]
@@ -90,12 +93,18 @@ namespace AR.SimTaxi.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.FindAsync(id);
+            var car = await _context
+                                .Cars
+                                .FindAsync(id);
+
             if (car == null)
             {
                 return NotFound();
             }
-            return View(car);
+
+            var createUpdateCarVM = _mapper.Map<Car, CreateUpdateCarViewModel>(car);
+
+            return View(createUpdateCarVM);
         }
 
         [HttpPost]
