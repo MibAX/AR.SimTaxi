@@ -109,34 +109,37 @@ namespace AR.SimTaxi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Car car)
+        public async Task<IActionResult> Edit(int id, CreateUpdateCarViewModel createUpdateCarVM)
         {
-            if (id != car.Id)
+            if (id != createUpdateCarVM.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                // TO DO
+                // Get the car from the DB
+                var car = await  _context
+                                    .Cars
+                                    .Where(car => car.Id == id)
+                                    .SingleOrDefaultAsync();
+
+                if(car == null)
                 {
-                    _context.Update(car);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CarExists(car.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                // Patch (Copy) the updated values from the createUpdateCarVM to the car
+                _mapper.Map(createUpdateCarVM, car);
+
+
+                _context.Update(car);
+                await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            return View(createUpdateCarVM);
         }
 
         [HttpPost, ActionName("Delete")]

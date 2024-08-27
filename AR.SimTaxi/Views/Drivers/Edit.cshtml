@@ -1,5 +1,6 @@
 ﻿@using AR.SimTaxi.Enums
-@model AR.SimTaxi.Data.Entities.Driver
+@using AR.SimTaxi.Models.Drivers
+@model CreateUpdateDriverViewModel
 
 @{
     ViewData["Title"] = "Edit Driver";
@@ -9,7 +10,7 @@
 
     <h1>
         Edit Driver
-        <span class="text-primary">@Model.FirstName @Model.LastName</span>
+        <span class="text-primary">@Model.FullName</span>
     </h1>
 
     <hr />

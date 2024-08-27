@@ -38,7 +38,7 @@ namespace AR.SimTaxi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int? id) 
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -92,47 +92,53 @@ namespace AR.SimTaxi.Controllers
                 return NotFound();
             }
 
-            var driver = await _context.Drivers.FindAsync(id);
+            var driver = await _context
+                                    .Drivers
+                                    .FindAsync(id);
 
             if (driver == null)
             {
                 return NotFound();
             }
 
-            return View(driver);
+            var driverVM = _mapper.Map<Driver, CreateUpdateDriverViewModel>(driver);
+
+            return View(driverVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Driver driver)
+        public async Task<IActionResult> Edit(int id, CreateUpdateDriverViewModel createUpdateDriverVM)
         {
-            if (id != driver.Id)
+            if (id != createUpdateDriverVM.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                // TO DO
+                // Get the driver from the DB
+                var driver = await _context
+                                    .Drivers
+                                    .Where(driver => driver.Id == id)
+                                    .SingleOrDefaultAsync();
+
+                if (driver == null)
                 {
-                    _context.Update(driver);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DriverExists(driver.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                // Patch (copy) the value from createUpdateDriverVM to driver
+                _mapper.Map(createUpdateDriverVM, driver);
+
+                _context.Update(driver);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(driver);
+            return View(createUpdateDriverVM);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -161,7 +167,7 @@ namespace AR.SimTaxi.Controllers
         private bool DriverExists(int id)
         {
             return _context.Drivers.Any(e => e.Id == id);
-        } 
+        }
 
         #endregion
     }
