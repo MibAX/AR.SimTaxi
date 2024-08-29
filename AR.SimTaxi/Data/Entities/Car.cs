@@ -26,5 +26,14 @@ namespace AR.SimTaxi.Data.Entities
                 return ProductionDate.Year;
             }
         }
+
+        [NotMapped]
+        public string Info
+        {
+            get
+            {
+                return $"{Model} - {PlateNumber}";
+            }
+        }
     }
 }
