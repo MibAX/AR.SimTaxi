@@ -16,6 +16,7 @@ namespace AR.SimTaxi.Data.Entities
         public int? DriverId { get; set; } // ? Nullable
         public Driver? Driver { get; set; } // ? Nullable
 
+        public List<Booking> Bookings { get; set; } = [];
 
         [NotMapped]
         public int Year
@@ -25,6 +26,5 @@ namespace AR.SimTaxi.Data.Entities
                 return ProductionDate.Year;
             }
         }
-
     }
 }

@@ -13,6 +13,7 @@ namespace AR.SimTaxi.Data.Entities
         public string? Email { get; set; }
         public Gender? Gender { get; set; }
 
+        public List<Booking> Bookings { get; set; } = [];
 
         [NotMapped]
         public string FullName

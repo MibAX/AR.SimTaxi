@@ -12,6 +12,7 @@ namespace AR.SimTaxi.Data.Entities
         public Gender Gender { get; set; }
 
         public List<Car> Cars { get; set; } = [];
+        public List<Booking> Booking { get; set; } = [];
 
 
         [NotMapped]
