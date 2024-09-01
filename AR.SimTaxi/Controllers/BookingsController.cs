@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using AR.SimTaxi.Data;
 using AR.SimTaxi.Data.Entities;
 using AutoMapper;
+using AR.SimTaxi.Models.Bookings;
 
 namespace AR.SimTaxi.Controllers
 {
@@ -27,8 +28,15 @@ namespace AR.SimTaxi.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Bookings.Include(b => b.Car).Include(b => b.Driver);
-            return View(await applicationDbContext.ToListAsync());
+            var bookings = await _context
+                                    .Bookings
+                                    .Include(booking => booking.Car)
+                                    .Include(booking => booking.Driver)
+                                    .ToListAsync();
+
+            var bookingVMs = _mapper.Map<List<BookingViewModel>>(bookings);
+
+            return View(bookingVMs);
         }
 
         [HttpGet]

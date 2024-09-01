@@ -6,6 +6,7 @@ namespace AR.SimTaxi.Models.Bookings
 {
     public class BookingViewModel
     {
+        [Display(Name = "Booking Number")]
         public int Id { get; set; }
         public string From { get; set; }
         public string To { get; set; }

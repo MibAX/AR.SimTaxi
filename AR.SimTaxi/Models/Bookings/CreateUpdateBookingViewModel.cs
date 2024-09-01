@@ -1,5 +1,4 @@
-﻿using AR.SimTaxi.Models.Passengers;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace AR.SimTaxi.Models.Bookings
@@ -14,7 +13,19 @@ namespace AR.SimTaxi.Models.Bookings
         public DateTime BookingTime { get; set; }
 
 
-        // TO DO
-        // Add Car, Driver, and Passenger Lookups and Ids        
+        [Display(Name = "Car")]
+        public int? CarId { get; set; }
+
+        [Display(Name = "Driver")]
+        public int? DriverId { get; set; }
+
+        [Display(Name = "Passengers")]
+        public List<int> PassengerIds { get; set; } = [];
+
+
+        //========== Lookups ========
+        public SelectList CarLookup { get; set; }
+        public SelectList DriverLookup { get; set; }
+        public MultiSelectList PassengerLookup { get; set; }
     }
 }
