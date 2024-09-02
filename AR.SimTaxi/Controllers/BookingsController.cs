@@ -62,9 +62,13 @@ namespace AR.SimTaxi.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Id");
-            ViewData["DriverId"] = new SelectList(_context.Drivers, "Id", "Id");
-            return View();
+            var createUpdateBookingVM = new CreateUpdateBookingViewModel();
+
+            createUpdateBookingVM.CarLookup = new SelectList(_context.Cars, "Id", "Info");
+            createUpdateBookingVM.DriverLookup = new SelectList(_context.Drivers, "Id", "FullName");
+            createUpdateBookingVM.PassengerLookup = new SelectList(_context.Passengers, "Id", "FullName");
+
+            return View(createUpdateBookingVM);
         }
 
         [HttpPost]

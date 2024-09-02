@@ -24,3 +24,25 @@ body {
 .text-emphasize {
     color: #880000 !important;
 }
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding: 4px 20px 6px 12px;
+}
+
+.select2-container .select2-selection--single {
+    height: 37px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 35px;
+    top: 3px;
+}
+
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #dee2e6;
+}
+
+.select2-container:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
