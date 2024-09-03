@@ -1,59 +1,80 @@
-﻿@model AR.SimTaxi.Data.Entities.Booking
+﻿@using AR.SimTaxi.Models.Bookings
+@model CreateUpdateBookingViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Booking";
 }
 
-<h1>Edit</h1>
+<h1>
+    Edit Booking
+    <span class="text-primary">#@Model.Id</span>
+</h1>
 
-<h4>Booking</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row">
+        <div class="col-lg-4">
             <div class="form-group">
                 <label asp-for="From" class="control-label"></label>
                 <input asp-for="From" class="form-control" />
                 <span asp-validation-for="From" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-lg-4">
             <div class="form-group">
                 <label asp-for="To" class="control-label"></label>
                 <input asp-for="To" class="form-control" />
                 <span asp-validation-for="To" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-lg-4">
             <div class="form-group">
                 <label asp-for="BookingTime" class="control-label"></label>
                 <input asp-for="BookingTime" class="form-control" />
                 <span asp-validation-for="BookingTime" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TotalPrice" class="control-label"></label>
-                <input asp-for="TotalPrice" class="form-control" />
-                <span asp-validation-for="TotalPrice" class="text-danger"></span>
-            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-lg-4">
             <div class="form-group">
                 <label asp-for="CarId" class="control-label"></label>
-                <select asp-for="CarId" class="form-control select-2" asp-items="ViewBag.CarId"></select>
-                <span asp-validation-for="CarId" class="text-danger"></span>
+                <select asp-for="CarId" class="form-control select-2" asp-items="@Model.CarLookup">
+                    <option value="">-- Select a Car --</option>
+                </select>
             </div>
+        </div>
+        <div class="col-lg-4">
             <div class="form-group">
                 <label asp-for="DriverId" class="control-label"></label>
-                <select asp-for="DriverId" class="form-control select-2" asp-items="ViewBag.DriverId"></select>
-                <span asp-validation-for="DriverId" class="text-danger"></span>
+                <select asp-for="DriverId" class="form-control select-2" asp-items="@Model.DriverLookup">
+                    <option value="">-- Select a Driver --</option>
+                </select>
             </div>
+        </div>
+        <div class="col-lg-4">
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="PassengerIds" class="control-label"></label>
+                <select asp-for="PassengerIds" class="form-control select-2" asp-items="@Model.PassengerLookup"></select>
+                <span asp-validation-for="PassengerIds" class="text-danger"></span>
             </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        <input type="submit" value="Save" class="btn btn-primary ms-2" />
+    </div>
+</form>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

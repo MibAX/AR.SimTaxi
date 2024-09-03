@@ -5,6 +5,7 @@ using AR.SimTaxi.Data;
 using AR.SimTaxi.Data.Entities;
 using AutoMapper;
 using AR.SimTaxi.Models.Bookings;
+using System.Linq;
 
 namespace AR.SimTaxi.Controllers
 {
@@ -66,24 +67,34 @@ namespace AR.SimTaxi.Controllers
 
             createUpdateBookingVM.CarLookup = new SelectList(_context.Cars, "Id", "Info");
             createUpdateBookingVM.DriverLookup = new SelectList(_context.Drivers, "Id", "FullName");
-            createUpdateBookingVM.PassengerLookup = new SelectList(_context.Passengers, "Id", "FullName");
+            createUpdateBookingVM.PassengerLookup = new MultiSelectList(_context.Passengers, "Id", "FullName");
 
             return View(createUpdateBookingVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Booking booking)
+        public async Task<IActionResult> Create(CreateUpdateBookingViewModel createUpdateBookingVM)
         {
             if (ModelState.IsValid)
             {
+                var booking = _mapper.Map<Booking>(createUpdateBookingVM);
+
+                booking.TotalPrice = GetBookingPrice();
+
+                await UpdateBookingPassengers(booking, createUpdateBookingVM.PassengerIds);
+
                 _context.Add(booking);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Id", booking.CarId);
-            ViewData["DriverId"] = new SelectList(_context.Drivers, "Id", "Id", booking.DriverId);
-            return View(booking);
+
+            createUpdateBookingVM.CarLookup = new SelectList(_context.Cars, "Id", "Info");
+            createUpdateBookingVM.DriverLookup = new SelectList(_context.Drivers, "Id", "FullName");
+            createUpdateBookingVM.PassengerLookup = new MultiSelectList(_context.Passengers, "Id", "FullName");
+
+            return View(createUpdateBookingVM);
         }
 
         [HttpGet]
@@ -94,14 +105,24 @@ namespace AR.SimTaxi.Controllers
                 return NotFound();
             }
 
-            var booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context
+                                    .Bookings
+                                    .Include(booking => booking.Passengers)
+                                    .Where(booking => booking.Id == id)
+                                    .SingleOrDefaultAsync();
+
             if (booking == null)
             {
                 return NotFound();
             }
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Id", booking.CarId);
-            ViewData["DriverId"] = new SelectList(_context.Drivers, "Id", "Id", booking.DriverId);
-            return View(booking);
+
+            var createUpdateBookingVM = _mapper.Map<CreateUpdateBookingViewModel>(booking);
+
+            createUpdateBookingVM.CarLookup = new SelectList(_context.Cars, "Id", "Info");
+            createUpdateBookingVM.DriverLookup = new SelectList(_context.Drivers, "Id", "FullName");
+            createUpdateBookingVM.PassengerLookup = new MultiSelectList(_context.Passengers, "Id", "FullName");
+
+            return View(createUpdateBookingVM);
         }
 
         [HttpPost]
@@ -160,6 +181,29 @@ namespace AR.SimTaxi.Controllers
         {
             return _context.Bookings.Any(e => e.Id == id);
         } 
+
+        private decimal GetBookingPrice()
+        {
+            var random = new Random();
+            var price = random.Next(10, 100);
+
+            return price;
+        }
+
+        private async Task UpdateBookingPassengers(Booking booking, List<int> passengerIds)
+        {
+            // Clear Booking Passengers
+            booking.Passengers.Clear();
+
+            // Get Passengers from the DB using passengerIds
+            var passengers = await _context
+                                        .Passengers
+                                        .Where(passenger => passengerIds.Contains(passenger.Id))
+                                        .ToListAsync();
+
+            // Add Passengers to Booking
+            booking.Passengers.AddRange(passengers);
+        }
 
         #endregion
     }

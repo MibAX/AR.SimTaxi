@@ -11,7 +11,12 @@ namespace AR.SimTaxi.AutoMapperProfiles
             CreateMap<Booking, BookingViewModel>();
             CreateMap<Booking, BookingDetailsViewModel>();
 
-            CreateMap<CreateUpdateBookingViewModel, Booking>().ReverseMap();
+            CreateMap<CreateUpdateBookingViewModel, Booking>();
+
+            CreateMap<Booking, CreateUpdateBookingViewModel>()
+                .ForMember(createUpdateBookingVM => createUpdateBookingVM.PassengerIds,
+                    opts =>
+                        opts.MapFrom(booking => booking.Passengers.Select(passenger => passenger.Id)));
         }
     }
 }

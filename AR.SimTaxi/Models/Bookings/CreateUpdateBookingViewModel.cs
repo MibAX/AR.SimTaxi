@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace AR.SimTaxi.Models.Bookings
@@ -24,8 +25,13 @@ namespace AR.SimTaxi.Models.Bookings
 
 
         //========== Lookups ========
+        [ValidateNever]
         public SelectList CarLookup { get; set; }
+
+        [ValidateNever]
         public SelectList DriverLookup { get; set; }
+
+        [ValidateNever]
         public MultiSelectList PassengerLookup { get; set; }
     }
 }
