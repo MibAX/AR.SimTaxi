@@ -1,54 +1,130 @@
-﻿@model AR.SimTaxi.Data.Entities.Booking
+﻿@using AR.SimTaxi.Models.Bookings
+@model BookingDetailsViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Booking Details";
 }
 
-<h1>Details</h1>
+<h1>
+    Booking Details
+    <span class="text-primary">#@Model.Id</span>
+</h1>
+
+<hr />
+
+<dl class="row">
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Id)
+    </dt>
+    <dd class="col-sm-10">
+        <span>#</span>@Html.DisplayFor(model => model.Id)
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.From)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.From)
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.To)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.To)
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.BookingTime)
+    </dt>
+    <dd class="col-sm-10">
+        @Model.BookingTime.ToString("ddd, dd MMM yyyy")
+        -
+        <span class="fw-bold text-primary">@Model.BookingTime.ToString("hh:mm tt")</span>
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.TotalPrice)
+    </dt>
+    <dd class="col-sm-10">
+        <span>$</span>@Html.DisplayFor(model => model.TotalPrice)
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.CarInfo)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.CarInfo)
+    </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.DriverFullName)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.DriverFullName)
+    </dd>
+</dl>
+
+<hr />
+
+<h3>Passengers</h3>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Passengers[0].FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Passengers[0].Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Passengers[0].PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Passengers[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Passengers[0].Gender)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var passenger in Model.Passengers)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => passenger.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => passenger.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => passenger.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => passenger.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => passenger.Gender)
+                </td>
+                <td>
+                    
+                    <a class="text-decoration-none ms-1" asp-controller="Passengers" asp-action="Details" asp-route-id="@passenger.Id" title="Details">
+                        <i class="fa-solid fa-circle-info text-info"></i>
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 <div>
-    <h4>Booking</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.From)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.From)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.To)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.To)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookingTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookingTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Car)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Car.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Driver)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Driver.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
 </div>

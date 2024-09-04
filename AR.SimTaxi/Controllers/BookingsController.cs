@@ -47,16 +47,22 @@ namespace AR.SimTaxi.Controllers
                 return NotFound();
             }
 
-            var booking = await _context.Bookings
-                .Include(b => b.Car)
-                .Include(b => b.Driver)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var booking = await _context
+                                    .Bookings
+                                    .Include(booking => booking.Car)
+                                    .Include(booking => booking.Driver)
+                                    .Include(booking => booking.Passengers)
+                                    .Where(booking => booking.Id == id)
+                                    .SingleOrDefaultAsync();
+
             if (booking == null)
             {
                 return NotFound();
             }
 
-            return View(booking);
+            var bookingDetailsVM = _mapper.Map<BookingDetailsViewModel>(booking);
+
+            return View(bookingDetailsVM);
         }
 
         [HttpGet]
