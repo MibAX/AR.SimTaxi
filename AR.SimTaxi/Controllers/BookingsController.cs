@@ -5,7 +5,6 @@ using AR.SimTaxi.Data;
 using AR.SimTaxi.Data.Entities;
 using AutoMapper;
 using AR.SimTaxi.Models.Bookings;
-using System.Linq;
 
 namespace AR.SimTaxi.Controllers
 {
@@ -127,36 +126,47 @@ namespace AR.SimTaxi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Booking booking)
+        public async Task<IActionResult> Edit(int id, CreateUpdateBookingViewModel createUpdateBookingVM)
         {
-            if (id != booking.Id)
+            if (id != createUpdateBookingVM.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                // Get booking from DB including the passengers
+                var booking = await _context
+                                        .Bookings
+                                        .Include(booking => booking.Passengers)
+                                        .Where(booking => booking.Id == id)
+                                        .SingleOrDefaultAsync();
+
+                if(booking == null)
                 {
-                    _context.Update(booking);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BookingExists(booking.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                // Patch (Copy) createUpdateBookingVM into the booking
+                _mapper.Map(createUpdateBookingVM, booking);
+
+                // Update passenger list 
+                await UpdateBookingPassengers(booking, createUpdateBookingVM.PassengerIds);
+
+                // Update price
+                booking.TotalPrice = GetBookingPrice();
+
+                _context.Update(booking);
+                await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Id", booking.CarId);
-            ViewData["DriverId"] = new SelectList(_context.Drivers, "Id", "Id", booking.DriverId);
-            return View(booking);
+
+            createUpdateBookingVM.CarLookup = new SelectList(_context.Cars, "Id", "Info");
+            createUpdateBookingVM.DriverLookup = new SelectList(_context.Drivers, "Id", "FullName");
+            createUpdateBookingVM.PassengerLookup = new MultiSelectList(_context.Passengers, "Id", "FullName");
+
+            return View(createUpdateBookingVM);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -179,7 +189,9 @@ namespace AR.SimTaxi.Controllers
 
         private bool BookingExists(int id)
         {
-            return _context.Bookings.Any(e => e.Id == id);
+            return _context
+                        .Bookings
+                        .Any(booking => booking.Id == id);
         } 
 
         private decimal GetBookingPrice()
