@@ -44,14 +44,26 @@ namespace AR.SimTaxi.Controllers
                 return NotFound();
             }
 
-            var passenger = await _context.Passengers
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var passenger = await _context
+                                    .Passengers
+
+                                    .Include(passenger => passenger.Bookings)
+                                        .ThenInclude(booking => booking.Car)
+
+                                    .Include(passenger => passenger.Bookings)
+                                        .ThenInclude(booking => booking.Driver)
+
+                                    .Where(passenger => passenger.Id == id)
+                                    .SingleOrDefaultAsync();
+
             if (passenger == null)
             {
                 return NotFound();
             }
 
-            return View(passenger);
+            var passengerDetailsVM = _mapper.Map<PassengerDetailsViewModel>(passenger);
+
+            return View(passengerDetailsVM);
         }
 
         [HttpGet]

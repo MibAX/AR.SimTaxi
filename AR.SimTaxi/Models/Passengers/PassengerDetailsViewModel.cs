@@ -1,4 +1,5 @@
 ﻿using AR.SimTaxi.Enums;
+using AR.SimTaxi.Models.Bookings;
 using System.ComponentModel.DataAnnotations;
 
 namespace AR.SimTaxi.Models.Passengers
@@ -17,5 +18,7 @@ namespace AR.SimTaxi.Models.Passengers
         public string PhoneNumber { get; set; }
         public string? Email { get; set; }
         public Gender? Gender { get; set; }
+
+        public List<BookingViewModel> Bookings { get; set; }
     }
 }
