@@ -21,7 +21,8 @@ namespace AR.SimTaxi
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddAutoMapper(typeof(Program));
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
 
             var app = builder.Build();
 

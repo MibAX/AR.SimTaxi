@@ -4,6 +4,7 @@ using AR.SimTaxi.Data;
 using AR.SimTaxi.Data.Entities;
 using AR.SimTaxi.Models.Cars;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AR.SimTaxi.Controllers
 {
@@ -65,7 +66,10 @@ namespace AR.SimTaxi.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            var createUpdateCarVM = new CreateUpdateCarViewModel();
+            createUpdateCarVM.DriverLookup = new SelectList(_context.Drivers, "Id", "FullName");
+
+            return View(createUpdateCarVM);
         }
 
         [HttpPost]
@@ -81,6 +85,8 @@ namespace AR.SimTaxi.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            createUpdateCarVM.DriverLookup = new SelectList(_context.Drivers, "Id", "FullName");
 
             return View(createUpdateCarVM);
         }
@@ -103,6 +109,7 @@ namespace AR.SimTaxi.Controllers
             }
 
             var createUpdateCarVM = _mapper.Map<Car, CreateUpdateCarViewModel>(car);
+            createUpdateCarVM.DriverLookup = new SelectList(_context.Drivers, "Id", "FullName");
 
             return View(createUpdateCarVM);
         }

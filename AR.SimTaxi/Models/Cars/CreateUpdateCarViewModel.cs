@@ -1,4 +1,6 @@
 ﻿using AR.SimTaxi.Enums;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace AR.SimTaxi.Models.Cars
@@ -21,5 +23,13 @@ namespace AR.SimTaxi.Models.Cars
 
         [Display(Name = "Power Type")]
         public PowerType PowerType { get; set; }
+
+        [Display(Name = "Driver")]
+        public int? DriverId { get; set; }
+
+        //============= lOOKUPS
+
+        [ValidateNever]
+        public SelectList DriverLookup { get; set; }
     }
 }
