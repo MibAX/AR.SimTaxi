@@ -4,6 +4,8 @@ using AR.SimTaxi.Data;
 using AR.SimTaxi.Data.Entities;
 using AutoMapper;
 using AR.SimTaxi.Models.Drivers;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Data;
 
 namespace AR.SimTaxi.Controllers
 {
@@ -33,6 +35,13 @@ namespace AR.SimTaxi.Controllers
                                     .ToListAsync();
 
             var driverVMs = _mapper.Map<List<Driver>, List<DriverViewModel>>(drivers);
+
+            var unassignedCars = await  _context
+                                            .Cars
+                                            .Where(car => car.DriverId == null)
+                                            .ToListAsync();
+
+            ViewData["CarLookup"] = new SelectList(unassignedCars, "Id", "Info");
 
             return View(driverVMs);
         }
@@ -158,6 +167,59 @@ namespace AR.SimTaxi.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignCar(int driverId, int carId)
+        {
+            var driver = await _context
+                                .Drivers
+                                .Include(driver => driver.Cars)
+                                .Where(driver => driver.Id == driverId)
+                                .SingleOrDefaultAsync();
+
+            if(driver == null)
+            {
+                return NotFound();
+            }
+
+            var car = await _context
+                                .Cars
+                                .Where(car => car.Id == carId)
+                                .SingleOrDefaultAsync();
+
+            if(car == null)
+            {
+                return NotFound();
+            }
+
+            driver.Cars.Add(car);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnassignCar(int carId)
+        {
+            var car = await _context
+                                .Cars
+                                .Where(car => car.Id == carId)
+                                .SingleOrDefaultAsync();
+
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            var driverId = car.DriverId;
+
+            car.DriverId = null;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = driverId });
         }
 
         #endregion

@@ -22,5 +22,7 @@ namespace AR.SimTaxi.Models.Cars
         [Display(Name = "Driver")]
         public string DriverFullName { get; set; }
         public int Year { get; set; }
+
+        public string Info { get; set; }
     }
 }
